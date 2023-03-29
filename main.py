@@ -183,9 +183,9 @@ class InfoJoc:
         t_final = self.final()
 
         if t_final == self.JMAX:
-            return 100000 - adancime
+            return 500 - adancime
         if t_final == self.JMIN:
-            return -100000 + adancime
+            return -500 + adancime
         if t_final == "remiza":
             return 0
         return self.linii_deschise(self.JMAX) - self.linii_deschise(self.JMIN)
@@ -286,7 +286,31 @@ def alpha_beta(alpha, beta, stare):
         return stare
 
     succesori = stare.mutari()
+      
+    if stare.j_curent == InfoJoc.JMAX:
+        for stareSuccesor in succesori:
+            scorVecin = alpha_beta(alpha, beta, stareSuccesor).estimare
+            
+            if scorVecin > alpha:
+                alpha = scorVecin
+                stare.stare_aleasa = stareSuccesor
+            
+            if beta <= alpha:
+                break
 
+        stare.estimare = alpha
+    else:
+        for stareSuccesor in succesori:
+            scorVecin = alpha_beta(alpha, beta, stareSuccesor).estimare
+            
+            if scorVecin < beta:
+                beta = scorVecin
+                stare.stare_aleasa = stareSuccesor
+                
+            if beta <= alpha:
+                break
+  
+        stare.estimare = beta
 
     return stare
 
@@ -362,9 +386,7 @@ def main():
                     for linie in range(InfoJoc.NR_COLOANE):
                         for coloana in range(InfoJoc.NR_COLOANE):
 
-                            if InfoJoc.celuleGrid[linie][coloana].collidepoint(
-                                    pos
-                            ):  #verifica daca punctul cu coord pos se afla in dreptunghi(celula)
+                            if InfoJoc.celuleGrid[linie][coloana].collidepoint(pos):  #verifica daca punctul cu coord pos se afla in dreptunghi(celula)
                                 ###############################
 
                                 if tabla_curenta.matr[linie][coloana] == InfoJoc.JMIN: 
